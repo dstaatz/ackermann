@@ -4,6 +4,7 @@
 use std::collections::HashMap;
 use std::fs::File;
 use std::time::Instant;
+use std::str::FromStr;
 
 use ron::ser::{to_writer_pretty, PrettyConfig};
 
@@ -77,7 +78,26 @@ fn main() {
             }
         }
 
+    } else if args.len() == 3 {
+
+        let i = I::from_str(&args[1]).unwrap();
+        let j = I::from_str(&args[2]).unwrap();
+        let result = ackermann(i, j);
+        let time = now.elapsed().as_secs_f32();
+        println!("{:10.6}: ackermann ({},{}) is: {}", time, i, j, result);
+
+    } else if args.len() == 4 && &args[1] == "cached" {
+
+        let mut cache = HashMap::new();
+        let i = I::from_str(&args[2]).unwrap();
+        let j = I::from_str(&args[3]).unwrap();
+        let result = ackermann_cached(&mut cache, i, j);
+        let time = now.elapsed().as_secs_f32();
+        println!("{:10.6}: ackermann_cached ({},{}) is: {}", time, i, j, result);
+        let file = File::create(format!("data/cache_{}-{}", i,j)).unwrap();
+        to_writer_pretty(file, &cache, PrettyConfig::new()).unwrap();
+
     } else {
-        println!("useage: ackermann [cached]");
+        println!("useage: ackermann [cached] [[m] [n]]");
     }
 }

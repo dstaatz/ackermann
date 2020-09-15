@@ -132,8 +132,16 @@ Additionally, by having a cache, we can see all the different values that needed
     2. Build a release for faster performance with `cargo build --release` and then `./target/release/ackermann`
 
 To run the cached version, run with "cached" as the first argument
+
 ```bash
 $ cargo run cached
  - or -
 $ ./target/release/ackermann cached
+```
+
+You can also specify arbitrary arguments to try computing ackermann function for. Ex:
+
+```bash
+$ ./target/release/ackermann 2 125000 
+  0.151636: ackermann_cached (2,125000) is: 250003
 ```
